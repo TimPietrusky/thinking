@@ -1,0 +1,20 @@
+{
+  "name": "thinking",
+  "type": "registry:block",
+  "dependencies": [],
+  "devDependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/thinking.tsx",
+      "type": "registry:block",
+      "content": "\"use client\";\r\n\r\nimport React from \"react\";\r\n\r\ninterface ColorStop {\r\n  color: string;\r\n  position: number;\r\n}\r\n\r\ninterface ThinkingProps {\r\n  text: string;\r\n  fontSize: number;\r\n  animationDuration: number;\r\n  colorStops: ColorStop[];\r\n}\r\n\r\nexport default function Thinking({\r\n  text,\r\n  fontSize,\r\n  animationDuration,\r\n  colorStops,\r\n}: ThinkingProps) {\r\n  const gradientString = createGradientString(colorStops);\r\n\r\n  return (\r\n    <div\r\n      className=\"thinking-text text-center w-full max-w-full overflow-hidden\"\r\n      aria-label=\"AI is thinking\"\r\n    >\r\n      {text}\r\n      <style jsx>{`\r\n        @keyframes gradient-animation {\r\n          0% {\r\n            background-position: 200% 50%;\r\n          }\r\n          100% {\r\n            background-position: 0% 50%;\r\n          }\r\n        }\r\n\r\n        .thinking-text {\r\n          background: ${gradientString};\r\n          background-size: 200% 100%;\r\n          animation: gradient-animation ${animationDuration}s linear infinite;\r\n          will-change: background-position;\r\n          color: transparent;\r\n          -webkit-background-clip: text;\r\n          background-clip: text;\r\n          font-size: clamp(8px, ${fontSize}px, 100px);\r\n          line-height: 1.2;\r\n          white-space: nowrap;\r\n        }\r\n\r\n        @media (prefers-reduced-motion: reduce) {\r\n          .thinking-text {\r\n            animation: none;\r\n            background-position: 0% 50%;\r\n          }\r\n        }\r\n      `}</style>\r\n    </div>\r\n  );\r\n}\r\n\r\nfunction createGradientString(colorStops: ColorStop[]): string {\r\n  const sortedStops = [...colorStops].sort((a, b) => a.position - b.position);\r\n\r\n  if (sortedStops.length < 2) {\r\n    sortedStops.push({ ...sortedStops[0], position: 100 });\r\n  }\r\n\r\n  const gradientParts = sortedStops.map(\r\n    (stop) => `${stop.color} ${stop.position}%`\r\n  );\r\n  const repeatedGradient = [...gradientParts, ...gradientParts].join(\", \");\r\n  return `linear-gradient(to right, ${repeatedGradient})`;\r\n}\r\n"
+    }
+  ],
+  "tailwind": {},
+  "cssVars": {},
+  "meta": {
+    "importSpecifier": "Thinking",
+    "moduleSpecifier": "@/components/thinking"
+  }
+}
